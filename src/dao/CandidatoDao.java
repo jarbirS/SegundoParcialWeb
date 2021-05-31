@@ -15,9 +15,9 @@ public class CandidatoDao {
 
 private ConexionPostgreSQL conexionpost;
 	
-	private static final String INSERT_CANDIDATO_SQL = "INSERT INTO candidato (nombre, email, pais) VALUES (?,?,?);";
+	private static final String INSERT_CANDIDATO_SQL = "INSERT INTO candidato (documento, nombre, apellido, numero) VALUES (?,?,?,?);";
 	private static final String DELETE_CANDIDATO_SQL = "DELETE FROM candidato WHERE id = ?;";
-	private static final String UPDATE_CANDIDATO_SQL = "UPDATE candidato SET nombre = ?, email = ?, pais = ? WHERE id=?;";
+	private static final String UPDATE_CANDIDATO_SQL = "UPDATE candidato SET documento = ?, nombre = ?, apellido = ?, numero = ? WHERE id=?;";
 	private static final String SELECT_CANDIDATO_BY_ID = "SELECT * FROM candidato WHERE id = ?;";
 	private static final String SELECT_ALL_CANDIDATOS = "SELECT * FROM candidato;";
 	
@@ -29,21 +29,22 @@ public CandidatoDao() {
 	
 	public void insert(Candidato candidato) throws SQLException {
 		try {
-			PreparedStatement preparedStatement = conexion.setPreparedStatement(INSERT_CANDIDATO_SQL);
-			preparedStatement.setString(1, candidato.getNombre());
-			preparedStatement.setString(2, candidato.getEmail());
-			preparedStatement.setString(3, candidato.getPais());
-			conexion.execute();
+			PreparedStatement preparedStatement = conexionpost.setPreparedStatement(INSERT_CANDIDATO_SQL);
+			preparedStatement.setString(1, candidato.getDocumento());
+			preparedStatement.setString(2, candidato.getNombre());
+			preparedStatement.setString(3, candidato.getApellido());
+			preparedStatement.setInt(4, candidato.getNumero());
+			conexionpost.execute();
 		}catch (SQLException e) {
 			
 		}
 	}
 	public void delete (int id) throws SQLException {
 		try {
-			PreparedStatement preparedStatement = conexion.setPreparedStatement(DELETE_CANDIDATO_SQL);
+			PreparedStatement preparedStatement = conexionpost.setPreparedStatement(DELETE_CANDIDATO_SQL);
 			preparedStatement.setInt(1, id);
 			
-			conexion.execute();
+			conexionpost.execute();
 		}catch (SQLException e) {
 			
 		}
@@ -52,12 +53,13 @@ public CandidatoDao() {
 	public void update(Candidato candidato) throws SQLException {
 		
 		try {
-			PreparedStatement preparedStatement = conexion.setPreparedStatement(UPDATE_CANDIDATO_SQL);
-			preparedStatement.setString(1, candidato.getNombre());
-			preparedStatement.setString(2, candidato.getEmail());
-			preparedStatement.setString(3, candidato.getPais());
-			preparedStatement.setInt(4, candidato.getId());
-			conexion.execute();
+			PreparedStatement preparedStatement = conexionpost.setPreparedStatement(UPDATE_CANDIDATO_SQL);
+			preparedStatement.setString(1, candidato.getDocumento());
+			preparedStatement.setString(2, candidato.getNombre());
+			preparedStatement.setString(3, candidato.getApellido());
+			preparedStatement.setInt(4, candidato.getNumero());
+			preparedStatement.setInt(5, candidato.getId());
+			conexionpost.execute();
 		}catch (SQLException e) {
 			
 		}
@@ -65,18 +67,19 @@ public CandidatoDao() {
 	
 	public List<Candidato> selectAll(){
 		
-		List <Candidato> candidato = new ArrayList <>();
+		List <Candidato> candidatos = new ArrayList <>();
 		
 		try {
-			PreparedStatement preparedStatement = conexion.setPreparedStatement(SELECT_ALL_CANDIDATOS);
-			ResultSet rs = conexion.query();
+			PreparedStatement preparedStatement = conexionpost.setPreparedStatement(SELECT_ALL_CANDIDATOS);
+			ResultSet rs = conexionpost.query();
 			
 			while (rs.next()) {
 				int id = rs.getInt("id");
+				String documento = rs.getString("documento");
 				String nombre = rs.getString("nombre");
-				String email = rs.getString("email");
-				String pais = rs.getString("pais");
-				candidatos.add(new Candidato ( id,nombre, email, pais));
+				String apellido = rs.getString("apellido");
+				int numero = rs.getInt("numero");
+				candidatos.add(new Candidato( id, documento, nombre, apellido, numero));
 				
 			}
 		}catch(SQLException e) {
@@ -90,17 +93,18 @@ public Candidato select(int id){
 		
 		
 		try {
-			PreparedStatement preparedStatement = conexion.setPreparedStatement(SELECT_CANDIDATO_BY_ID);
+			PreparedStatement preparedStatement = conexionpost.setPreparedStatement(SELECT_CANDIDATO_BY_ID);
 			preparedStatement.setInt(1, id);
 			
-			ResultSet rs = conexion.query();
+			ResultSet rs = conexionpost.query();
 			
 			while (rs.next()) {
 				
+				String documento = rs.getString("documento");
 				String nombre = rs.getString("nombre");
-				String email = rs.getString("email");
-				String pais = rs.getString("pais");
-				candidato = new Candidato ( id, nombre, email, pais);
+				String apellido = rs.getString("apellido");
+				int numero = rs.getInt("numero");
+				candidato = new Candidato ( id, documento, nombre, apellido, numero);
 				
 			}
 		}catch(SQLException e) {

@@ -4,6 +4,7 @@ public class Candidato {
 
 	private int id;
 	private String documento;
+	private String nombre;
 	private String apellido;
 	private int numero;
 	
@@ -12,10 +13,11 @@ public class Candidato {
 		
 	}
 	
-	public Candidato (int id, String documento, String apellido, int numero) {
+	public Candidato (int id, String documento,String nombre,  String apellido, int numero) {
 		
 		this.id=id;
 		this.documento=documento;
+		this.nombre=nombre;
 		this.apellido=apellido;
 		this.numero=numero;
 	}
@@ -34,6 +36,14 @@ public class Candidato {
 
 	public void setDocumento(String documento) {
 		this.documento = documento;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String ombre) {
+		this.nombre = nombre;
 	}
 
 	public String getApellido() {
